@@ -85,7 +85,7 @@
   (fn [v] (boolean (re-matches regex v))))
 
 (def shadow?  (regex-matcher shadow-regex))
-(def tshirt-unit? (regex-matcher tshirt-unit-regex))
+(def tshirt-size? (regex-matcher tshirt-unit-regex))
 (def image? (regex-matcher image-regex))
 (def arbitrary-value? (regex-matcher arbitrary-value-regex))
 (def length-unit? (regex-matcher length-unit-regex))
@@ -102,8 +102,9 @@
 
 (def arbitrary-size? (make-arbitrary-value-checker "position" never?))
 (def arbitrary-image? (make-arbitrary-value-checker image-labels image?))
-(def arbitrary-shadow (make-arbitrary-value-checker "" shadow?))
+(def arbitrary-shadow? (make-arbitrary-value-checker "" shadow?))
 (def arbitrary-length? (make-arbitrary-value-checker "length" length-only?))
 (def arbitrary-number? (make-arbitrary-value-checker "number" tw-number?))
+(def arbitrary-position? (make-arbitrary-value-checker "position" never?))
 
 
