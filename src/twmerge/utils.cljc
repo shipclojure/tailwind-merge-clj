@@ -1,9 +1,9 @@
-(ns shipclojure.utils
+(ns twmerge.utils
   (:require
    [clojure.string :as str]
    [clojure.walk :as walk]
-   [shipclojure.default-config :refer [get-default-config]]
-   [shipclojure.validators :as v]))
+   [twmerge.default-config :refer [get-default-config]]
+   [twmerge.validators :as v]))
 
 (defn theme-getter?
   [f]
@@ -137,6 +137,102 @@
       {:get-class-group-id get-class-group-id
        :get-conflicting-class-group-ids get-conflicting-class-group-ids})))
 
+(defn- traverse-class-name
+  [class-name separator]
+  (let [sep-length (count separator)
+        separator-single-character? (= sep-length 1)
+        first-separator-char (get separator 0)]
+    (loop [modifiers []
+           modifier-start 0
+           bracket-depth 0
+           postfix-modifier-position nil
+           idx 0]
+      (if (= idx (count class-name))
+        {:modifiers modifiers
+         :modifiers-start modifier-start
+         :postfix-modifier-position postfix-modifier-position}
+        (let [current-char (get class-name idx)]
+          (cond
+            (and (= bracket-depth 0)
+                 (= current-char first-separator-char)
+                 (or separator-single-character?
+                     (= (subs class-name idx (+ idx sep-length)) separator)))
+            (recur (conj modifiers (subs class-name modifier-start idx))
+                   (+ idx sep-length)
+                   bracket-depth
+                   postfix-modifier-position
+                   (+ idx sep-length))
 
+            (and (= bracket-depth 0)
+                 (= current-char \/))
+            (recur modifiers
+                   modifier-start
+                   bracket-depth
+                   idx  ;; set postfix-position to current idx
+                   (inc idx))
 
+            (= current-char \[)
+            (recur modifiers
+                   modifier-start
+                   (inc bracket-depth)
+                   postfix-modifier-position
+                   (inc idx))
 
+            (= current-char \])
+            (recur modifiers
+                   modifier-start
+                   (dec bracket-depth)
+                   postfix-modifier-position
+                   (inc idx))
+
+            :else
+            (recur modifiers
+                   modifier-start
+                   bracket-depth
+                   postfix-modifier-position
+                   (inc idx))))))))
+
+(def important-modifier "!")
+
+(defn make-parse-class
+  [config]
+  (let [{:keys [separator experimental-parse-class]} config
+        parse-class
+        (fn [class-name]
+          (let [{:keys [modifiers modifiers-start postfix-modifier-position]}
+                (traverse-class-name class-name separator)
+                base-class-with-important (if (empty? modifiers) class-name (subs class-name modifiers-start))
+                has-important-modifier? (str/starts-with? base-class-with-important important-modifier)
+                base-class (if has-important-modifier? (subs base-class-with-important 1) base-class-with-important)
+                maybe-postfix-modifier-position (when (and postfix-modifier-position
+                                                           (> postfix-modifier-position modifiers-start))
+                                                  (- postfix-modifier-position modifiers-start))]
+            {:modifiers modifiers
+             :has-important-modifier? has-important-modifier?
+             :base-class base-class
+             :maybe-postfix-modifier-position maybe-postfix-modifier-position}))]
+    (if experimental-parse-class
+      (fn [class] (experimental-parse-class {:class class :parse-class parse-class}))
+      parse-class)))
+
+(defn sort-modifiers
+  "Sorts modifiers according to following schema:
+  - Predefined modifiers are sorted alphabetically
+  - When an arbitrary variant appears, it must be preserved which modifiers are before and after it
+  - modifiers - array of strings"
+  [modifiers]
+  (if (< (count modifiers) 1)
+    modifiers
+    (let [sorted-modifiers (volatile! [])
+          unsorted-modifiers (volatile! [])]
+      (doseq [modifier modifiers]
+        (let [arbitrary-variant? (= (first modifier) \[)]
+          (if arbitrary-variant?
+            (do (vreset! sorted-modifiers (-> (into @sorted-modifiers (sort @unsorted-modifiers))
+                                              (conj modifier)))
+                (vreset! unsorted-modifiers []))
+            (vswap! unsorted-modifiers conj modifier))))
+      @sorted-modifiers)))
+
+(defn merge-classes
+  [class-list config-utils])

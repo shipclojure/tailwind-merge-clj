@@ -1,4 +1,4 @@
-(ns shipclojure.validators
+(ns twmerge.validators
   (:require
    [clojure.string :as str]))
 

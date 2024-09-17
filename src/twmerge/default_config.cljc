@@ -1,6 +1,6 @@
-(ns shipclojure.default-config
+(ns twmerge.default-config
   (:require
-   [shipclojure.validators :as v]))
+   [twmerge.validators :as v]))
 
 (defn from-theme
   [key]
@@ -528,3 +528,6 @@
                         "overflow-x" [{"overflow-x" (get-overflow)}]})
 
 
+
+
+(conj (conj [] "start") "end")
