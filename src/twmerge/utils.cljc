@@ -234,5 +234,77 @@
             (vswap! unsorted-modifiers conj modifier))))
       @sorted-modifiers)))
 
-(defn merge-classes
-  [class-list config-utils])
+(def split-classes-regex #"\s+")
+
+(defn create-config-utils
+  [config]
+  (merge {:parse-class-name (make-parse-class config)}
+         (create-class-group-utils config)))
+
+(def config-utils (create-config-utils (get-default-config)))
+
+(defn merge-class-list [class-list config-utils]
+  (let [{:keys [parse-class-name get-class-group-id get-conflicting-class-group-ids]} config-utils]
+    (loop [class-names (str/split (str/trim class-list) split-classes-regex)
+           class-groups-in-conflict #{}
+           result []]
+      (prn class-groups-in-conflict)
+      (if (empty? class-names)
+        (str/join " " (reverse result))
+        (let [original-class-name (first class-names)
+              {:keys [modifiers
+                      has-important-modifier?
+                      base-class
+                      maybe-postfix-modifier-position]} (parse-class-name original-class-name)
+              has-postfix-modifier? (boolean maybe-postfix-modifier-position)
+              class-group-id (get-class-group-id (if has-postfix-modifier?
+                                                   (subs base-class 0 maybe-postfix-modifier-position)
+                                                   base-class))]
+
+          (if (not class-group-id)
+            (if (not has-postfix-modifier?)
+              ;; not a tailwind class
+              (recur (rest class-names)
+                     class-groups-in-conflict
+                     (conj result original-class-name))
+              (let [class-group-id (get-class-group-id base-class)]
+                (if (not class-group-id)
+                  ;; not a tailwind class
+                  (recur (rest class-names)
+                         class-groups-in-conflict
+                         (conj result original-class-name))
+                  (let [has-postfix-modifier? false
+                        variant-modifier (str/join ":" (sort-modifiers modifiers))
+                        modifier-id (if has-important-modifier?
+                                      (str variant-modifier important-modifier)
+                                      variant-modifier)
+                        class-id (str modifier-id class-group-id)]
+                    (if (contains? class-groups-in-conflict class-id)
+                      ;; tailwind class omitted due to conflict
+                      (recur (rest class-names) class-groups-in-conflict result)
+                      (let [new-conflicts (into class-groups-in-conflict
+                                                (map #(str modifier-id %)
+                                                     (get-conflicting-class-group-ids
+                                                      class-group-id
+                                                      has-postfix-modifier?)))]
+                        (recur (rest class-names)
+                               (conj new-conflicts class-id)
+                               (conj result original-class-name))))))))
+            (let [variant-modifier (str/join ":" (sort-modifiers modifiers))
+                  modifier-id (if has-important-modifier?
+                                (str variant-modifier important-modifier)
+                                variant-modifier)
+                  class-id (str modifier-id class-group-id)]
+              (if (contains? class-groups-in-conflict class-id)
+                (recur (rest class-names) class-groups-in-conflict result)
+                (let [new-conflicts (into class-groups-in-conflict
+                                          (map #(str modifier-id %)
+                                               (get-conflicting-class-group-ids class-group-id has-postfix-modifier?)))]
+                  (recur (rest class-names)
+                         (conj new-conflicts class-id)
+                         (conj result original-class-name)))))))))))
+
+(merge-class-list "w-xl w-2xl pl-24 px-20"  config-utils)
+
+
+
