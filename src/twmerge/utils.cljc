@@ -99,7 +99,7 @@
   (if (empty? class-parts)
     (:class-group-id cpo)
     (let [current-class-part (first class-parts)
-          next-cpo (get-in cpo [:next-part current-class-part])
+          next-cpo (get-in cpo [:children current-class-part])
           next-cpo-class-group (when next-cpo (get-class-group-recursive (rest class-parts) next-cpo))]
       (cond
         (string? next-cpo-class-group) next-cpo-class-group
@@ -116,7 +116,8 @@
 
 (defn create-class-group-utils [config]
   (let [class-map (create-class-map config)
-        {:keys [conflicting-class-groups conflicting-class-group-modifiers]} config]
+        {:keys [conflicting-class-groups conflicting-class-groups-modifiers]} config]
+    (prn conflicting-class-groups)
     (letfn [(get-class-group-id [class-name]
               (let [class-parts-result (str/split class-name (re-pattern class-part-separator))
                     ;; Classes like `-inset-1` produce an empty string
@@ -130,8 +131,8 @@
 
             (get-conflicting-class-group-ids [class-group-id has-postfix-modifier]
               (let [conflicts (get conflicting-class-groups class-group-id [])]
-                (if (and has-postfix-modifier (get conflicting-class-group-modifiers class-group-id))
-                  (into conflicts (get conflicting-class-group-modifiers class-group-id))
+                (if (and has-postfix-modifier (get conflicting-class-groups-modifiers class-group-id))
+                  (into conflicts (get conflicting-class-groups-modifiers class-group-id))
                   conflicts)))]
 
       {:get-class-group-id get-class-group-id
