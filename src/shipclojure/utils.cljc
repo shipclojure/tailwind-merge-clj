@@ -43,12 +43,16 @@
 (defn get-or-create-child! [v-node path]
   (let [current-node (volatile! v-node)]
     (doseq [path-part (str/split path (re-pattern class-part-separator))]
-      (vswap! v-node assoc-in [:children path-part]
-              #(or % (volatile! (map->ClassTreeNode {:class-group-id nil
-                                                     :children {}
-                                                     :validators []}))))
-      (vreset! current-node (get-in @v-node [:children path-part])))
+      (let [child-node (volatile! (map->ClassTreeNode {:class-group-id nil
+                                                       :children {}
+                                                       :validators []}))]
+        (vswap! v-node assoc-in [:children path-part]
+                (or (get-in @v-node [:children path-part]) child-node))
+        (vreset! current-node child-node)))
     @current-node))
+
+(comment
+  (def v-node (volatile! (map->ClassTreeNode {:class-group-id nil :children {} :validators []}))))
 
 (defn process-classes-recursively! [class-group v-tree-node class-group-id theme]
   (doseq [class-definition class-group]
@@ -114,11 +118,15 @@
   (let [class-map (create-class-map config)
         {:keys [conflicting-class-groups conflicting-class-group-modifiers]} config]
     (letfn [(get-class-group-id [class-name]
-              (let [class-parts (str/split class-name (re-pattern class-part-separator))]
-                (if (and (= (first class-parts) "") (> (count class-parts) 1))
-                  (recur (str/join class-part-separator (rest class-parts)))
-                  (or (get-class-group-recursive class-parts class-map)
-                      (get-group-id-for-arbitrary-property class-name)))))
+              (let [class-parts-result (str/split class-name (re-pattern class-part-separator))
+                    ;; Classes like `-inset-1` produce an empty string
+                    ;; as first classPart. We assume that classes for
+                    ;; negative values are used correctly and remove
+                    ;; it from class-parts.
+                    inset-class? (and (= (first class-parts-result) "") (> (count class-parts-result) 1))
+                    class-parts (if inset-class? (rest class-parts-result) class-parts-result)]
+                (or (get-class-group-recursive class-parts class-map)
+                    (get-group-id-for-arbitrary-property class-name))))
 
             (get-conflicting-class-group-ids [class-group-id has-postfix-modifier]
               (let [conflicts (get conflicting-class-groups class-group-id [])]
