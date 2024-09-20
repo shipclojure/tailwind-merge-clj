@@ -2,8 +2,7 @@
   (:require
    [clojure.string :as str]
    [clojure.walk :as walk]
-   [twmerge.default-config :refer [get-default-config]]
-   [twmerge.validators :as v]))
+   [twmerge.default-config :as c :refer [get-default-config]]))
 
 (defn theme-getter?
   [f]
@@ -15,7 +14,7 @@
 
 (defrecord ClassValidatorObject [class-group-id validator])
 
-(def simple [["aspect" [{"aspect" ["auto" "square" "video" v/arbitrary-value?]}]]])
+(def small-config (merge (get-default-config) {:class-groups c/small-class-group}))
 
 (def class-part-separator "-")
 
@@ -41,14 +40,17 @@
          class-group-entries)))
 
 (defn get-or-create-child! [v-node path]
-  (let [current-node (volatile! v-node)]
-    (doseq [path-part (str/split path (re-pattern class-part-separator))]
+  (let [current-node (volatile! v-node)
+        path-parts (str/split path (re-pattern class-part-separator))]
+    (doseq [path-part path-parts]
       (let [child-node (volatile! (map->ClassTreeNode {:class-group-id nil
                                                        :children {}
                                                        :validators []}))]
-        (vswap! v-node assoc-in [:children path-part]
-                (or (get-in @v-node [:children path-part]) child-node))
-        (vreset! current-node child-node)))
+        (when-not (get-in @@current-node [:children path-part])
+          (when-let [val @current-node]
+            (vswap! val assoc-in [:children path-part]
+                    child-node)))
+        (vreset! current-node (get-in @@current-node [:children path-part]))))
     @current-node))
 
 (comment
@@ -233,6 +235,7 @@
                                               (conj modifier)))
                 (vreset! unsorted-modifiers []))
             (vswap! unsorted-modifiers conj modifier))))
+      (vreset! sorted-modifiers (into @sorted-modifiers (sort @unsorted-modifiers)))
       @sorted-modifiers)))
 
 (def split-classes-regex #"\s+")
@@ -256,7 +259,9 @@
               {:keys [modifiers
                       has-important-modifier?
                       base-class
-                      maybe-postfix-modifier-position]} (parse-class-name original-class-name)
+                      maybe-postfix-modifier-position]
+               :as props} (parse-class-name original-class-name)
+
               has-postfix-modifier? (boolean maybe-postfix-modifier-position)
               class-group-id (get-class-group-id (if has-postfix-modifier?
                                                    (subs base-class 0 maybe-postfix-modifier-position)

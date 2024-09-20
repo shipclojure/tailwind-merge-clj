@@ -79,7 +79,7 @@
 (defn get-default-config []
   {:cache-size 500
    :separator ":"
-   :theme {"colors" [v/any?]
+   :theme {"colors" [any?]
            "spacing" [v/length? v/arbitrary-length?]
            "blur" ["none" "" v/tshirt-size? v/arbitrary-value?]
            "brightness" (get-number-and-arbitrary)
@@ -146,11 +146,11 @@
                   "grow" [{"grow" (get-zero-and-empty)}]
                   "shrink" [{"shrink" (get-zero-and-empty)}]
                   "order" [{"order" ["first" "last" "none" v/tw-integer? v/arbitrary-value?]}]
-                  "grid-cols" [{"grid-cols" [v/any?]}]
+                  "grid-cols" [{"grid-cols" [any?]}]
                   "col-start-end" [{"col" ["auto" {"span" ["full" v/tw-integer? v/arbitrary-value?]} v/arbitrary-value?]}]
                   "col-start" [{"col-start" (get-number-with-auto-and-arbitrary)}]
                   "col-end" [{"col-end" (get-number-with-auto-and-arbitrary)}]
-                  "grid-rows" [{"grid-rows" [v/any?]}]
+                  "grid-rows" [{"grid-rows" [any?]}]
                   "row-start-end" [{"row" ["auto" {"span" [v/tw-integer? v/arbitrary-value?]} v/arbitrary-value?]}]
                   "row-start" [{"row-start" (get-number-with-auto-and-arbitrary)}]
                   "row-end" [{"row-end" (get-number-with-auto-and-arbitrary)}]
@@ -252,7 +252,7 @@
                                           "extrabold"
                                           "black"
                                           v/arbitrary-number?]}]
-                  "font-family" [{"font" [v/any?]}]
+                  "font-family" [{"font" [any?]}]
                   "fvn-normal" ["normal-nums"]
                   "fvn-ordinal" ["ordinal"]
                   "fvn-slashed-zero" ["slashed-zero"]
@@ -368,7 +368,7 @@
                   "ring-offset-w" [{"ring-offset" [v/length? v/arbitrary-length?]}]
                   "ring-offset-color" [{"ring-offset" [colors]}]
                   "shadow" [{"shadow" ["" "inner" "none" v/tshirt-size? v/arbitrary-shadow?]}]
-                  "shadow-color" [{"shadow" [v/any?]}]
+                  "shadow-color" [{"shadow" [any?]}]
                   "opacity" [{"opacity" [opacity]}]
                   "mix-blend" [{"mix-blend" (into (get-blend-modes) ["plus-lighter" "plus-darker"])}]
                   "bg-blend" [{"bg-blend" (get-blend-modes)}]
@@ -507,27 +507,13 @@
                               "touch-pz" ["touch"]}
    :conflicting-class-groups-modifiers {"font-size" ["leading"]}})
 
-(def small-class-group {"aspect" [{"aspect" ["auto" "square" "video" v/arbitrary-value?]}]
-                        "container" ["container"]
-                        "columns" [{"columns" [v/tshirt-size?]}]
-                        "break-after" [{"break-after" (get-breaks)}]
-                        "break-before" [{"break-before" (get-breaks)}]
-                        "break-inside" [{"break-inside" ["auto" "avoid" "avoid-page" "avoid-column"]}]
-                        "box-decoration" [{"box-decoration" ["slice" "clone"]}]
-                        "box" [{"box" ["border" "content"]}]
-                        "display" ["block" "inline-block" "inline" "flex" "inline-flex" "table" "inline-table"
-                                   "table-caption" "table-cell" "table-column" "table-column-group"
-                                   "table-footer-group" "table-header-group" "table-row-group" "table-row"
-                                   "flow-root" "grid" "inline-grid" "contents" "list-item" "hidden"]
-                        "float" [{"float" ["right" "left" "none" "start" "end"]}]
-                        "clear" [{"clear" ["left" "right" "both" "none" "start" "end"]}]
-                        "isolation" ["isolate" "isolation-auto"]
-                        "object-fit" [{"object" ["contain" "cover" "fill" "none" "scale-down"]}]
-                        "object-position" [{"object" (into (get-positions) [v/arbitrary-value?])}]
-                        "overflow" [{"overflow" (get-overflow)}]
-                        "overflow-x" [{"overflow-x" (get-overflow)}]})
+(def small-class-group
+  {"aspect" [{"aspect" ["auto" "square" "video" v/arbitrary-value?]}]
+   "container" ["container"]
+   "columns" [{"columns" [v/tshirt-size?]}]
+   "display" ["block" "inline-block" "inline" "flex" "inline-flex" "table" "inline-table"
+              "table-caption" "table-cell" "table-column" "table-column-group"
+              "table-footer-group" "table-header-group" "table-row-group" "table-row"
+              "flow-root" "grid" "inline-grid" "contents" "list-item" "hidden"]
+   "col-start-end" [{"col" ["auto" {"span" ["full" v/tw-integer? v/arbitrary-value?]} v/arbitrary-value?]}]})
 
-
-
-
-(conj (conj [] "start") "end")

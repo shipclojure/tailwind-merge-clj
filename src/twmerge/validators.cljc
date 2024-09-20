@@ -61,7 +61,7 @@
                (re-matches fraction-regex value))))
 
 (defn never? [v] false)
-(defn any? [v] true)
+
 
 (comment
   (length? "screen")
