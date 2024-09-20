@@ -252,10 +252,9 @@
     (loop [class-names (str/split (str/trim class-list) split-classes-regex)
            class-groups-in-conflict #{}
            result []]
-      (prn class-groups-in-conflict)
       (if (empty? class-names)
         (str/join " " (reverse result))
-        (let [original-class-name (first class-names)
+        (let [original-class-name (last class-names)
               {:keys [modifiers
                       has-important-modifier?
                       base-class
