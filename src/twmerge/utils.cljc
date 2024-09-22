@@ -93,6 +93,12 @@
     (deep-deref class-map)))
 
 (comment
+
+  (-> (get  (:children (create-class-map small-config)) "table")
+      :children
+      keys))
+
+(comment
   (create-class-map (get-default-config)))
 
 (defn get-class-group-recursive
@@ -106,7 +112,7 @@
       (cond
         (string? next-cpo-class-group) next-cpo-class-group
         (empty? (:validators cpo)) nil
-        :else (let [class-rest (str/join class-parts class-part-separator)
+        :else (let [class-rest (str/join  class-part-separator class-parts)
                     {:keys [validators]} cpo]
                 (some #(when ((:validator %) class-rest) (:class-group-id %)) validators))))))
 
@@ -119,7 +125,6 @@
 (defn create-class-group-utils [config]
   (let [class-map (create-class-map config)
         {:keys [conflicting-class-groups conflicting-class-groups-modifiers]} config]
-    (prn conflicting-class-groups)
     (letfn [(get-class-group-id [class-name]
               (let [class-parts-result (str/split class-name (re-pattern class-part-separator))
                     ;; Classes like `-inset-1` produce an empty string
@@ -245,9 +250,7 @@
   (merge {:parse-class-name (make-parse-class config)}
          (create-class-group-utils config)))
 
-(def config-utils (create-config-utils (get-default-config)))
-
-(defn merge-class-list [class-list config-utils]
+(defn merge-class-list [config-utils class-list]
   (let [{:keys [parse-class-name get-class-group-id get-conflicting-class-group-ids]} config-utils]
     (loop [class-names (str/split (str/trim class-list) split-classes-regex)
            class-groups-in-conflict #{}
@@ -308,8 +311,6 @@
                   (recur (rest class-names)
                          (conj new-conflicts class-id)
                          (conj result original-class-name)))))))))))
-
-(merge-class-list "w-xl w-2xl pl-24 px-20"  config-utils)
 
 
 
