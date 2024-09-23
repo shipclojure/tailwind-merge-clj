@@ -261,8 +261,7 @@
               {:keys [modifiers
                       has-important-modifier?
                       base-class
-                      maybe-postfix-modifier-position]
-               :as props} (parse-class-name original-class-name)
+                      maybe-postfix-modifier-position]} (parse-class-name original-class-name)
 
               has-postfix-modifier? (boolean maybe-postfix-modifier-position)
               class-group-id (get-class-group-id (if has-postfix-modifier?
@@ -308,7 +307,7 @@
                 (let [new-conflicts (into class-groups-in-conflict
                                           (map #(str modifier-id %)
                                                (get-conflicting-class-group-ids class-group-id has-postfix-modifier?)))]
-                  (recur (rest class-names)
+                  (recur (butlast class-names)
                          (conj new-conflicts class-id)
                          (conj result original-class-name)))))))))))
 
