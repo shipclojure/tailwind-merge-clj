@@ -12,6 +12,15 @@
       "stroke-2 stroke-[3]" "stroke-[3]"
       "outline-black outline-1" "outline-black outline-1"
       "grayscale-0 grayscale-[50%]" "grayscale-[50%]"
-      "grow grow-[2]" "grow-[2]")))
+      "grow grow-[2]" "grow-[2]"))
+
+  (testing "Merge classes from the same group correctly"
+    (is (= (tw-merge "overflow-x-auto overflow-x-hidden") "overflow-x-hidden"))
+    (is (= (tw-merge "basis-full basis-auto") "basis-auto"))
+    (is (= (tw-merge "w-full w-fit") "w-fit"))
+    (is (= (tw-merge "overflow-x-auto overflow-x-hidden overflow-x-scroll") "overflow-x-scroll"))
+    (is (= (tw-merge "overflow-x-auto hover:overflow-x-hidden overflow-x-scroll") "hover:overflow-x-hidden overflow-x-scroll"))
+    (is (= (tw-merge "overflow-x-auto hover:overflow-x-hidden hover:overflow-x-auto overflow-x-scroll") "hover:overflow-x-auto overflow-x-scroll" ))
+    (is (= (tw-merge "col-span-1 col-span-full") "col-span-full"))))
 
 

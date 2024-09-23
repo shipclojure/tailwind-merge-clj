@@ -1,6 +1,9 @@
 (ns twmerge.default-config
   (:require
-   [twmerge.validators :as v]))
+   [twmerge.validators :as v]
+   [flatland.ordered.map :as o]))
+
+(o/ordered-map {:a 1 :b 2 :c 2})
 
 (defn from-theme
   [key]
@@ -456,7 +459,7 @@
                   "stroke-w" [{"stroke" [v/length? v/arbitrary-length? v/arbitrary-number?]}]
                   "stroke" [{"stroke" [colors "none"]}]
                   "sr" ["sr-only" "not-sr-only"]
-                  "forced-color-adjust" [{"forced-color-adjust" ["auto" "none"]}]}
+                  "forced-color-adjust" [{"forced-color-adjust" ["auto" "none"]}])
 
    :conflicting-class-groups {"overflow" ["overflow-x" "overflow-y"]
                               "overscroll" ["overscroll-x" "overscroll-y"]
@@ -514,9 +517,15 @@
   {"aspect" [{"aspect" ["auto" "square" "video" v/arbitrary-value?]}]
    "container" ["container"]
    "columns" [{"columns" [v/tshirt-size?]}]
+   "stroke-w" [{"stroke" [v/length? v/arbitrary-length? v/arbitrary-number?]}]
+   "stroke" [{"stroke" [colors "none"]}]
    "display" ["block" "inline-block" "inline" "flex" "inline-flex" "table" "inline-table"
               "table-caption" "table-cell" "table-column" "table-column-group"
               "table-footer-group" "table-header-group" "table-row-group" "table-row"
               "flow-root" "grid" "inline-grid" "contents" "list-item" "hidden"]
    "col-start-end" [{"col" ["auto" {"span" ["full" v/tw-integer? v/arbitrary-value?]} v/arbitrary-value?]}]})
+
+(def config (merge (get-default-config) {:class-groups small-class-group}))
+
+
 
