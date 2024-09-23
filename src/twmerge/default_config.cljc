@@ -104,7 +104,10 @@
            "skew" (get-number-and-arbitrary)
            "space" (get-spacing-with-arbitrary)
            "translate" (get-spacing-with-arbitrary)}
-   :class-groups {"aspect" [{"aspect" ["auto" "square" "video" v/arbitrary-value?]}]
+   ;; We use ordered map as insertion order must be preserved when
+   ;; iterating over the keys
+   :class-groups (o/ordered-map
+                  "aspect" [{"aspect" ["auto" "square" "video" v/arbitrary-value?]}]
                   "container" ["container"]
                   "columns" [{"columns" [v/tshirt-size?]}]
                   "break-after" [{"break-after" (get-breaks)}]
