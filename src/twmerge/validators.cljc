@@ -23,13 +23,6 @@
     (catch #?(:clj Throwable :cljs :default) _
       nil)))
 
-(defn- parse-float
-  [v]
-  (try
-    #?(:clj (Long/parseLong v)
-       :cljs (parse-long v))
-    (catch #?(:clj Throwable :cljs :default) _
-      nil)))
 
 (defn- remove-percent
   [s]
