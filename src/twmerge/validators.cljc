@@ -4,11 +4,13 @@
 
 (def string-lengths #{"px" "full" "screen"})
 (def image-labels #{"image" "url"})
+(def size-labels #{"length" "size" "percentage"})
 (def tshirt-unit-regex #"^(\d+(\.\d+)?)?(xs|sm|md|lg|xl)$")
 (def fraction-regex #"^\d+\/\d+$")
 (def arbitrary-value-regex #"(?i)^\[(?:([a-z-]+):)?(.+)\]$")
+
 (def length-unit-regex
-  #"\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|ch|ex|r?lh|cq(w|h|i|b|min|max))|\b(calc|min|max|clamp)\(.+\)|^0$")
+  #"(?:\d*\.)?\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|ch|ex|r?lh|cq(w|h|i|b|min|max))|\b(calc|min|max|clamp)\(.+\)|^0$")
 (def color-function-regex #"^(rgba?|hsla?|hwb|(ok)?(lab|lch))\(.+\)$")
 (def shadow-regex #"^(inset_)?-?((\d+)?\.?(\d+)[a-z]+|0)_-?((\d+)?\.?(\d+)[a-z]+|0)")
 (def image-regex
@@ -61,7 +63,7 @@
                (string-lengths value)
                (re-matches fraction-regex value))))
 
-(defn never? [v] false)
+(defn never? [_v] false)
 
 
 (comment
@@ -101,7 +103,7 @@
   (and (length-unit? v)
        (not (color-function? v))))
 
-(def arbitrary-size? (make-arbitrary-value-checker "position" never?))
+(def arbitrary-size? (make-arbitrary-value-checker size-labels never?))
 (def arbitrary-image? (make-arbitrary-value-checker image-labels image?))
 (def arbitrary-shadow? (make-arbitrary-value-checker "" shadow?))
 (def arbitrary-length? (make-arbitrary-value-checker "length" length-only?))

@@ -24,5 +24,3 @@
     (fixed-size-memoize (partial u/merge-class-list cu) cache-size)))
 
 (def tw-merge (create-tw-merge (c/get-default-config)))
-
-

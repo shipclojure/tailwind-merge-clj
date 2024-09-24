@@ -166,7 +166,7 @@
                   "gap" [{"gap" [gap]}]
                   "gap-x" [{"gap-x" [gap]}]
                   "gap-y" [{"gap-y" [gap]}]
-                  "justify-content" [{"justify:" (into ["normal"] (get-align))}]
+                  "justify-content" [{"justify" (into ["normal"] (get-align))}]
                   "justify-items" [{"justify-items" ["start", "end", "center", "stretch"]}]
                   "justify-self" [{"justify-self" ["auto", "start", "end", "center", "stretch"]}],
                   "align-content" [{"content" (into ["normal" "baseline"] (get-align))}],
@@ -512,20 +512,4 @@
                               "touch-y" ["touch"]
                               "touch-pz" ["touch"]}
    :conflicting-class-groups-modifiers {"font-size" ["leading"]}})
-
-(def small-class-group
-  {"aspect" [{"aspect" ["auto" "square" "video" v/arbitrary-value?]}]
-   "container" ["container"]
-   "columns" [{"columns" [v/tshirt-size?]}]
-   "stroke-w" [{"stroke" [v/length? v/arbitrary-length? v/arbitrary-number?]}]
-   "stroke" [{"stroke" [colors "none"]}]
-   "display" ["block" "inline-block" "inline" "flex" "inline-flex" "table" "inline-table"
-              "table-caption" "table-cell" "table-column" "table-column-group"
-              "table-footer-group" "table-header-group" "table-row-group" "table-row"
-              "flow-root" "grid" "inline-grid" "contents" "list-item" "hidden"]
-   "col-start-end" [{"col" ["auto" {"span" ["full" v/tw-integer? v/arbitrary-value?]} v/arbitrary-value?]}]})
-
-(def config (merge (get-default-config) {:class-groups small-class-group}))
-
-
 

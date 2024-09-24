@@ -118,7 +118,7 @@
 
 (defn get-group-id-for-arbitrary-property [class-name]
   (when-let [[_ arbitrary-property-class-name] (re-find arbitrary-property-regex class-name)]
-    (when-let [property (second (str/split arbitrary-property-class-name #":"))]
+    (when-let [property (first (str/split arbitrary-property-class-name #":"))]
       ;; I use two dots here because one dot is used as prefix for class groups in plugins
       (str "arbitrary.." property))))
 
@@ -271,13 +271,13 @@
           (if (not class-group-id)
             (if (not has-postfix-modifier?)
               ;; not a tailwind class
-              (recur (rest class-names)
+              (recur (butlast class-names)
                      class-groups-in-conflict
                      (conj result original-class-name))
               (let [class-group-id (get-class-group-id base-class)]
                 (if (not class-group-id)
                   ;; not a tailwind class
-                  (recur (rest class-names)
+                  (recur (butlast class-names)
                          class-groups-in-conflict
                          (conj result original-class-name))
                   (let [has-postfix-modifier? false
@@ -288,13 +288,13 @@
                         class-id (str modifier-id class-group-id)]
                     (if (contains? class-groups-in-conflict class-id)
                       ;; tailwind class omitted due to conflict
-                      (recur (rest class-names) class-groups-in-conflict result)
+                      (recur (butlast class-names) class-groups-in-conflict result)
                       (let [new-conflicts (into class-groups-in-conflict
                                                 (map #(str modifier-id %)
                                                      (get-conflicting-class-group-ids
                                                       class-group-id
                                                       has-postfix-modifier?)))]
-                        (recur (rest class-names)
+                        (recur (butlast class-names)
                                (conj new-conflicts class-id)
                                (conj result original-class-name))))))))
             (let [variant-modifier (str/join ":" (sort-modifiers modifiers))
@@ -303,7 +303,7 @@
                                 variant-modifier)
                   class-id (str modifier-id class-group-id)]
               (if (contains? class-groups-in-conflict class-id)
-                (recur (rest class-names) class-groups-in-conflict result)
+                (recur (butlast class-names) class-groups-in-conflict result)
                 (let [new-conflicts (into class-groups-in-conflict
                                           (map #(str modifier-id %)
                                                (get-conflicting-class-group-ids class-group-id has-postfix-modifier?)))]
