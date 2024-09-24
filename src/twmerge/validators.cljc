@@ -13,6 +13,7 @@
   #"(?:\d*\.)?\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|ch|ex|r?lh|cq(w|h|i|b|min|max))|\b(calc|min|max|clamp)\(.+\)|^0$")
 (def color-function-regex #"^(rgba?|hsla?|hwb|(ok)?(lab|lch))\(.+\)$")
 (def shadow-regex #"^(inset_)?-?((\d+)?\.?(\d+)[a-z]+|0)_-?((\d+)?\.?(\d+)[a-z]+|0)")
+
 (def image-regex
   #"^(url|image|image-set|cross-fade|element|(repeating-)?(linear|radial|conic)-gradient)\(.+\)$")
 
@@ -65,7 +66,6 @@
 
 (defn never? [_v] false)
 
-
 (comment
   (length? "screen")
   (length? "1/5")
@@ -109,5 +109,3 @@
 (def arbitrary-length? (make-arbitrary-value-checker "length" length-only?))
 (def arbitrary-number? (make-arbitrary-value-checker "number" tw-number?))
 (def arbitrary-position? (make-arbitrary-value-checker "position" never?))
-
-
