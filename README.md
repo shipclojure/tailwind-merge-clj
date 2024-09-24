@@ -1,38 +1,26 @@
 # tailwind-merge-clj
 
-FIXME: my new library.
+Merge Tailwind CSS classes without style conflicts for Clojure(Script)
 
 ## Usage
+```clojure
+(require '[twmerge.core :as t])
 
-FIXME: write usage documentation!
+;; Get the current time
+(t/twmerge "w-xl w-[100px]") ;; => "w-[100px]"
+(t/twmerge "px-2 py-1 bg-red hover:bg-dark-red p-3 bg-[#B91C1C]")
+;; => hover:bg-dark-red p-3 bg-[#B91C1C]
 
-Invoke a library API function from the command-line:
+```
 
-    $ clojure -X shipclojure.tailwind-merge-clj/foo :a 1 :b '"two"'
-    {:a 1, :b "two"} "Hello, World!"
+-   Supports Tailwind v3.0 up to v3.4
+-   Works in all modern browsers and JVM env
 
-Run the project's tests (they'll fail until you edit them):
+## Acknowledgements
 
-    $ clojure -T:build test
+Full credit for the implementation goes to the [Original Tailwind Merge](https://github.com/dcastil/tailwind-merge) and the author [Dany Castillo](https://github.com/dcastil/tailwind-merge).
 
-Run the project's CI pipeline and build a JAR (this will fail until you edit the tests to pass):
-
-    $ clojure -T:build ci
-
-This will produce an updated `pom.xml` file with synchronized dependencies inside the `META-INF`
-directory inside `target/classes` and the JAR in `target`. You can update the version (and SCM tag)
-information in generated `pom.xml` by updating `build.clj`.
-
-Install it locally (requires the `ci` task be run first):
-
-    $ clojure -T:build install
-
-Deploy it to Clojars -- needs `CLOJARS_USERNAME` and `CLOJARS_PASSWORD` environment
-variables (requires the `ci` task be run first):
-
-    $ clojure -T:build deploy
-
-Your library will be deployed to net.clojars.shipclojure/tailwind-merge-clj on clojars.org by default.
+This is a rewrite of the same implementation logic in `cljc` to better support server side rendering from JVM.
 
 ## License
 
