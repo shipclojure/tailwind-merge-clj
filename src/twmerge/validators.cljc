@@ -23,6 +23,14 @@
     (catch #?(:clj Throwable :cljs :default) _
       nil)))
 
+(defn- parse-int
+  "Parse a string to an integer."
+  [v]
+  (try
+    #?(:clj (Integer/parseInt v)
+       :cljs (js/parseInt v))
+    (catch #?(:clj Throwable :cljs :default) _
+      nil)))
 
 (defn- remove-percent
   [s]
@@ -40,7 +48,7 @@
 
 (defn tw-integer?
   [v]
-  (int? (parse-float v)))
+  (int? (parse-int v)))
 
 (defn percent?
   [v]

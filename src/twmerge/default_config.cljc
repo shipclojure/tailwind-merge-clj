@@ -46,7 +46,7 @@
   ["auto" "hidden" "clip" "visible" "scroll"])
 
 (defn get-spacing-with-auto-and-arbitrary []
-  ["auto" v/arbitrary-value?])
+  ["auto" v/arbitrary-value? spacing])
 
 (defn get-spacing-with-arbitrary []
   [v/arbitrary-value? spacing])
