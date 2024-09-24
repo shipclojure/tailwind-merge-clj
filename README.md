@@ -16,6 +16,12 @@ Merge Tailwind CSS classes without style conflicts for Clojure(Script)
 -   Supports Tailwind v3.0 up to v3.4
 -   Works in all modern browsers and JVM env
 
+## Install
+
+## Limitations
+
+See [original's limitations](https://github.com/dcastil/tailwind-merge/blob/v2.5.2/docs/limitations.md)
+
 ## Acknowledgements
 
 Full credit for the implementation goes to the [Original Tailwind Merge](https://github.com/dcastil/tailwind-merge) and the author [Dany Castillo](https://github.com/dcastil/tailwind-merge).
