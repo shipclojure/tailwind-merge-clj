@@ -6,7 +6,8 @@
 (def image-labels #{"image" "url"})
 (def size-labels #{"length" "size" "percentage"})
 (def tshirt-unit-regex #"^(\d+(\.\d+)?)?(xs|sm|md|lg|xl)$")
-(def fraction-regex #"^\d+\/\d+$")
+(def fraction-regex #?(:clj #"^\d+\/\d+$"
+                       :cljs #"^\d+/\d+$"))
 (def arbitrary-value-regex #"(?i)^\[(?:([a-z-]+):)?(.+)\]$")
 (def shadow-regex #"^(inset_)?-?((\d+)?\.?(\d+)[a-z]+|0)_-?((\d+)?\.?(\d+)[a-z]+|0)")
 (def length-unit-regex
