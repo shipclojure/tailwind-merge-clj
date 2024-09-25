@@ -8,5 +8,5 @@
  {current/deps {:local/root "."}}
 
  :tasks
- {test-clj (shell "clojure -M:test-clj -m kaocha.runner \"$@\"")
-  test-cljs (shell "clojure -Adev -X com.widdindustries.tiado-cljs2/tests-ci-shadow :compile-mode :release")}}
+ {test-clj (shell "clojure -M:test-clj -m kaocha.runner :unit")
+  test-cljs (shell "clojure -M:test-cljs -X com.widdindustries.tiado-cljs2/tests-ci-shadow :compile-mode :release")}}

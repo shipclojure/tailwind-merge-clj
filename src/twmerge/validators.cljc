@@ -103,7 +103,7 @@
 
 (def arbitrary-size? (make-arbitrary-value-checker size-labels never?))
 (def arbitrary-image? (make-arbitrary-value-checker image-labels image?))
-(def arbitary-length? (make-arbitrary-value-checker "length" length-only?))
+(def arbitrary-length? (make-arbitrary-value-checker "length" length-only?))
 (def arbitrary-number? (make-arbitrary-value-checker "number" tw-number?))
 (def arbitrary-position? (make-arbitrary-value-checker "position" never?))
 (def arbitrary-shadow? (make-arbitrary-value-checker "" shadow?))

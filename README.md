@@ -1,3 +1,4 @@
+[![Clojars Project](https://img.shields.io/clojars/v/com.shipclojure/tailwind-merge-clj.svg)](https://clojars.org/com.shipclojure/tailwind-merge-clj)
 # tailwind-merge-clj
 
 Merge Tailwind CSS classes without style conflicts for Clojure(Script)
