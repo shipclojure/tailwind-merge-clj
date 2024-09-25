@@ -20,17 +20,20 @@ jobs:
         with:
           cli: 1.10.1.693 # Clojure CLI based on tools.deps
 
+      - name: Setup Babashka
+        uses: turtlequeue/setup-babashka@v1.7.0
+        with:
+          babashka-version: 1.3.189
+
+      - name: Check bb runs
+        run: bb --version
+
       - name: Run Clj Unit tests
-        run: make test-clj
+        run: bb test-clj
 
       - name: Install Chrome
         uses: browser-actions/setup-chrome@latest
 
       - name: Run Cljs Unit tests
-        run: make test-cljs-shadow
+        run: bb test-cljs
 
-      - name: Install babashka master
-        run: bash <(curl -s https://raw.githubusercontent.com/babashka/babashka/master/install)
-
-      - name: Run bb tests
-        run: bb test

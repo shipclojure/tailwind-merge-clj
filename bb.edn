@@ -8,9 +8,5 @@
  {current/deps {:local/root "."}}
 
  :tasks
- {:requires ([clojure.test :as c.test]
-             [tick.api-test :as api-test])
-  test      {:doc "Run all tests in namespace tick.api-test"
-             :task (do (println "Running tests")
-                     (in-ns 'api-test)
-                     (c.test/run-all-tests))}}}
+ {test-clj (shell "clojure -M:test-clj -m kaocha.runner \"$@\"")
+  test-cljs (shell "clojure -Adev -X com.widdindustries.tiado-cljs2/tests-ci-shadow :compile-mode :release")}}
