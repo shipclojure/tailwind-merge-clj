@@ -17,7 +17,22 @@ Merge Tailwind CSS classes without style conflicts for Clojure(Script)
 -   Supports Tailwind v3.0 up to v3.4
 -   Works in all modern browsers and JVM env
 
-## Install
+## Installation
+
+To include one of the above libraries, for instance `ring-core`, add
+the following dependency to your `deps.edn` file:
+
+    com.shipclojure/tailwind-merge-clj {:mvn/version "0.1.0"}
+
+Or to your Leiningen project file:
+
+    [com.shipclojure/tailwind-merge-clj "0.1.0"]
+
+The package is available on [Clojars](https://clojars.org/com.shipclojure/tailwind-merge-clj))
+
+## Features
+
+See [tests](./test/twmerge/core_test.cljc)
 
 ## Limitations
 
