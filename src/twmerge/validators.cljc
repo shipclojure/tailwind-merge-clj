@@ -8,12 +8,10 @@
 (def tshirt-unit-regex #"^(\d+(\.\d+)?)?(xs|sm|md|lg|xl)$")
 (def fraction-regex #"^\d+\/\d+$")
 (def arbitrary-value-regex #"(?i)^\[(?:([a-z-]+):)?(.+)\]$")
-
+(def shadow-regex #"^(inset_)?-?((\d+)?\.?(\d+)[a-z]+|0)_-?((\d+)?\.?(\d+)[a-z]+|0)")
 (def length-unit-regex
   #"(?:\d*\.)?\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|ch|ex|r?lh|cq(w|h|i|b|min|max))|\b(calc|min|max|clamp)\(.+\)|^0$")
 (def color-function-regex #"^(rgba?|hsla?|hwb|(ok)?(lab|lch))\(.+\)$")
-(def shadow-regex #"^(inset_)?-?((\d+)?\.?(\d+)[a-z]+|0)_-?((\d+)?\.?(\d+)[a-z]+|0)")
-
 (def image-regex
   #"^(url|image|image-set|cross-fade|element|(repeating-)?(linear|radial|conic)-gradient)\(.+\)$")
 
@@ -85,14 +83,14 @@
 
 (defn regex-matcher
   [regex]
-  (fn [v] (boolean (re-matches regex v))))
+  (fn [v] (boolean (re-find regex v))))
 
-(def shadow?  (regex-matcher shadow-regex))
 (def tshirt-size? (regex-matcher tshirt-unit-regex))
 (def image? (regex-matcher image-regex))
 (def arbitrary-value? (regex-matcher arbitrary-value-regex))
 (def length-unit? (regex-matcher length-unit-regex))
 (def color-function? (regex-matcher color-function-regex))
+(def shadow? (regex-matcher shadow-regex))
 
 (defn length-only?
   "`color-function?` check is necessary because color functions can
@@ -105,7 +103,9 @@
 
 (def arbitrary-size? (make-arbitrary-value-checker size-labels never?))
 (def arbitrary-image? (make-arbitrary-value-checker image-labels image?))
-(def arbitrary-shadow? (make-arbitrary-value-checker "" shadow?))
-(def arbitrary-length? (make-arbitrary-value-checker "length" length-only?))
+(def arbitary-length? (make-arbitrary-value-checker "length" length-only?))
 (def arbitrary-number? (make-arbitrary-value-checker "number" tw-number?))
 (def arbitrary-position? (make-arbitrary-value-checker "position" never?))
+(def arbitrary-shadow? (make-arbitrary-value-checker "" shadow?))
+
+

@@ -14,8 +14,6 @@
 
 (defrecord ClassValidatorObject [class-group-id validator])
 
-(def small-config (merge (get-default-config) {:class-groups c/small-class-group}))
-
 (def class-part-separator "-")
 
 (defn deep-deref
