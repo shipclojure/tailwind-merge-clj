@@ -32,7 +32,14 @@ The package is available on [Clojars](https://clojars.org/com.shipclojure/tailwi
 
 ## Features
 
+Works both on clojure & clojurescript runtimes so it can be used to SSR from JVM with a tool like [Uix](https://github.com/pitch-io/uix)
+
+
 See [tests](./test/twmerge/core_test.cljc)
+
+## What is it for?
+
+See [Original's library doc for what it is for](https://github.com/dcastil/tailwind-merge/blob/main/docs/what-is-it-for.md)
 
 ## Limitations
 
