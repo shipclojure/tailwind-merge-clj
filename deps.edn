@@ -9,7 +9,7 @@
              :extra-deps  {org.clojure/tools.namespace {:mvn/version "1.4.4"}
                            lambdaisland/kaocha           {:mvn/version "1.0.732"}
                            lambdaisland/kaocha-junit-xml {:mvn/version "0.0.76"}}}
-  :test-cljs {:extra-paths ["test"]
+  :test-cljs {:extra-paths ["test" "web-target"]
               :extra-deps  {com.widdindustries/tiado-cljs2
                             {:git/url "https://github.com/henryw374/tiado-cljs2.git"
                              :sha "fbd9f3b8df3523ccf11bbc685836ce7f96f18068"}}}}}
