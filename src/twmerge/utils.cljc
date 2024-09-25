@@ -90,11 +90,6 @@
     ;; Return just the persistent tree
     (deep-deref class-map)))
 
-(comment
-
-  (-> (get  (:children (create-class-map small-config)) "table")
-      :children
-      keys))
 
 (comment
   (create-class-map (get-default-config)))

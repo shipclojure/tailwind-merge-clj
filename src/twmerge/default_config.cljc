@@ -3,8 +3,6 @@
    [twmerge.validators :as v]
    [flatland.ordered.map :as o]))
 
-(o/ordered-map {:a 1 :b 2 :c 2})
-
 (defn from-theme
   [key]
   (with-meta

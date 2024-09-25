@@ -9,4 +9,4 @@
 
  :tasks
  {test-clj (shell "clojure -M:test-clj -m kaocha.runner :unit")
-  test-cljs (shell "clojure -M:test-cljs -X com.widdindustries.tiado-cljs2/tests-ci-shadow :compile-mode :release")}}
+  test-cljs (shell "clojure -A:test-cljs -X com.widdindustries.tiado-cljs2/tests-ci-shadow :compile-mode :release")}}

@@ -1,6 +1,6 @@
 (ns twmerge.validators-test
   (:require
-   [clojure.test :refer :all]
+   [clojure.test :refer [deftest testing are is]]
    [twmerge.validators :as v]))
 
 (deftest validators

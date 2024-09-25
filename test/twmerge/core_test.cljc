@@ -1,6 +1,6 @@
 (ns twmerge.core-test
   (:require
-   [clojure.test :refer :all]
+   [clojure.test :refer [deftest testing are is]]
    [twmerge.core :refer [tw-merge]]))
 
 (deftest simple
